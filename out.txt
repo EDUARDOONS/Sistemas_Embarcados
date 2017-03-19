@@ -1,0 +1,20 @@
+total 455
+-rwxr-xr-x 1 eduar eduar    233 mar 16 11:37 Makefile
+-rwxr-xr-x 1 eduar eduar    104 mar 16 17:23 ola_mundo.c
+-rwxr-xr-x 1 eduar eduar    153 mar 16 17:30 main.c
+-rw-r--r-- 1 eduar eduar     34 mar 16 18:02 ola_mundo.txt
+-rwxr-xr-x 1 eduar eduar    181 mar 17 06:27 ola_usuario_1.c
+-rwxr-xr-x 1 eduar eduar  62848 mar 17 22:32 ola_usuario_1.exe
+-rw-r--r-- 1 eduar eduar     18 mar 17 22:43 ola.txt
+-rwxr-xr-x 1 eduar eduar 177805 mar 18 00:08 main.exe
+-rw-r--r-- 1 eduar eduar    213 mar 18 00:30 ola_usuario_2.c
+-rwxr-xr-x 1 eduar eduar  62465 mar 18 00:31 ola_usuario_2.exe
+-rwxr-xr-x 1 eduar eduar    267 mar 18 09:45 ola_usuario_3.c
+-rwxr-xr-x 1 eduar eduar  62465 mar 18 09:47 ola_usuario_3.exe
+-rwxr-xr-x 1 eduar eduar   4340 mar 18 11:20 gmon.out
+-rw-r--r-- 1 eduar eduar    206 mar 18 19:29 num_caracs.c
+-rw-r--r-- 1 eduar eduar    257 mar 18 19:46 ola_argumentos.c
+-rwxr-xr-x 1 eduar eduar    209 mar 18 19:52 num_caracs.h
+-rwxr-xr-x 1 eduar eduar    247 mar 18 19:53 ola_num_caracs_1.c
+-rwxr-xr-x 1 eduar eduar  63006 mar 18 19:54 ola_num_caracs_1.exe
+-rw-r--r-- 1 eduar eduar      0 mar 18 20:05 out.txt
