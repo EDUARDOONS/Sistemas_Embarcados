@@ -1,0 +1,38 @@
+Derick Horrana 
+10/0009891
+
+	O que são sistemas embarcados?
+Um sistema embarcado (ou sistema embutido, ou sistema embebido) é um sistema microprocessado no qual o computador é completamente dedicado ao dispositivo ou sistema que ele controla ,e que, realiza um conjunto de tarefas predefinidas, geralmente com requisitos específicos. Já que o sistema é dedicado a tarefas específicas, através de engenharia pode-se otimizar o projeto reduzindo tamanho, recursos computacionais e custo do produto.
+	
+	
+2. O que são sistemas microprocesssados?
+Um sistema microprocessado é um circuito integrado que realiza as funções de cálculo e tomada de decisão de um computador e incorpora as funções de uma unidade central de computação (UCP) em um único circuito integrado, ou no máximo alguns circuitos integrados. E portanto é um dispositivo multifuncional programável que aceita dados digitais como entrada, processa de acordo com as instruções armazenadas em sua memória, e fornece resultados como saída.
+	
+
+	3. Apresente aplicações de sistemas embarcados:
+	(a)	Para a indústria automotiva;
+Controladores da tração, do motor e do antibloqueio em automóveis: freios ABS e controle de tração.
+
+	(b)	Para eletrodomésticos;
+Eletrodomésticos, como fornos microondas, máquinas de lavar, aparelhos de TV, DVD players.
+
+	(c)	Para automação industrial.
+Tratores e implementos agrícolas
+
+	
+
+	4. Cite arquiteturas possíveis e as diferenças entre elas.
+	ARM:
+•	simplificação das instruções
+•	ocupam pouca área e tem baixo consumo de energia
+•	processador de 32 bits
+MIPS:
+•	usa apenas registradores para realizar as suas operações aritméticas e lógicas
+Atmel AVR:
+•	é um microcontrolador RISC de chip único com uma arquitetura Harvard modificada de 8-bit (µC)
+•	memória flash
+
+	5. Por que usamos o Raspberry Pi na disciplina, ao invés de outro system-on-chip?
+Porque pode ser usado com um sistema operacional (geralmente Linux), e possui capacidade de executar vários programas ao mesmo tempo. É mais complicado de usar do que um Arduino, por exemplo,mas possui a mesma capacidade de modularidade. Vale lembrar que como computador, o Raspberry executa as funções básicas de um computador moderno, dado seu tamanho e sua custo-efetividade.
+
+
