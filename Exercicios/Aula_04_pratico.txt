@@ -8,6 +8,7 @@ Para todas as questões, compile-as com o gcc e execute-as via terminal.
 1. Crie um código em C para escrever "Ola mundo!" em um arquivo chamado 'ola_mundo.txt'.
 
 
+//echo "ola mundo" < ola_mundo.txt
 
 2. Crie um código em C que pergunta ao usuário seu nome e sua idade, e escreve este conteúdo em um arquivo com o seu nome e extensão '.txt'. 
 Por exemplo, considerando que o código criado recebeu o nome de 'ola_usuario_1':
@@ -28,6 +29,41 @@ Por exemplo, considerando que o código criado recebeu o nome de 'ola_usuario_1'
 
 
 
+//arquivo ola_usuario_1
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+int main(void)
+{
+	char string[80], nome[30], idade[4];
+	int i=0;
+	FILE *p;
+	printf("Qual seu nome\n");
+	scanf("%s", nome);
+	printf("Qual sua idade\n");
+	scanf("%s", idade);
+
+	//criar arquivo
+	sprintf(string, "%s.txt", nome); 
+	
+	if (!(p = fopen(string,"w"))) /* Caso ocorra algum erro na abertura do arquivo..*/
+	{ /* o programa aborta automaticamente */
+	printf("Erro! Impossivel abrir o arquivo!\n");
+	exit(1);
+	}
+	
+	//escrever no arquivo
+	
+	fprintf(p, "Nome: %s\n", nome);
+	//putc('\n', pf);
+	fprintf(p, "Idade: %s anos.\n", idade);
+	
+return 0;
+
+}
+
+
 3. Crie um código em C que recebe o nome do usuário e e sua idade como argumentos de entrada (usando as variáveis argc e *argv[]), 
 e escreve este conteúdo em um arquivo com o seu nome e extensão '.txt'.
 Por exemplo, considerando que o código criado recebeu o nome de 'ola_usuario_2':
@@ -43,16 +79,87 @@ Por exemplo, considerando que o código criado recebeu o nome de 'ola_usuario_2'
 
 
 
+//arquivo ola_usuario_2
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(int argc, char* argv[])
+{
+    int i=0;
+    char string[10];
+	FILE *p;
+
+	//criar o nome do arquivo
+	sprintf(string, "%s.txt", argv[1]); //junta os nomes do arquivo
+	
+	
+	if (!(p = fopen(string,"w"))) /* Caso ocorra algum erro na abertura do arquivo..*/
+	{ /* o programa aborta automaticamente */
+	printf("Erro! Impossivel abrir o arquivo!\n");
+	exit(1);
+	}
+		
+	fprintf(p, "Nome: %s\n", argv[1]); // escreve no arquivo
+	fprintf(p, "Idade: %s anos.\n", argv[2]);  // escreve no arquivo
+	    
+return 0;   
+} 
+
 4. Crie uma função que retorna o tamanho de um arquivo, usando o seguinte protótipo:
 
 
 	int tam_arq_texto(char *nome_arquivo);
 
 
-Salve esta função em um arquivo separado chamado 'bib_arqs.c'. 
+Salve esta função em um arquivo separado chamado 'bib_arqs_main.c'. 
 Salve o protótipo em um arquivo chamado 'bib_arqs.h'. 
 Compile 'bib_arqs.c' para gerar o objeto 'bib_arqs.o'.
 
+
+
+//arquivo bib_arqs_main.c
+#include <stdio.h>
+#include <stdlib.h>
+#include "bib_arqs.h"
+
+int main(void)
+{
+    int i=0;
+    char string[80], *nome_arquivo;
+	FILE *p;
+	
+	printf("digite o nome completo do arquivo\n");
+	scanf("%s", string);
+		
+	p = fopen(string,"r");
+	if(p == NULL){
+	printf("ERRO ao tentar abrir %s\n");
+	exit (1);
+	}
+	printf("ok");
+	tam_arq_texto(string);
+	    
+return 0;   
+
+}
+
+//arquivo bib_arqs.h
+#include <stdio.h>
+
+int tam_arq_texto(char *nome_arquivo)
+{
+	int t=0;
+	FILE *p;
+	
+	p = fopen(nome_arquivo,"r");
+	fseek (p, 0, SEEK_END);
+	t = ftell (p);
+	fclose(p);
+
+	printf("\tTamanho do arquivo= %i\n", t);
+	
+return 0;
+}
 
 
 5. Crie uma função que lê o conteúdo de um arquivo-texto e o guarda em uma string, usando o seguinte protótipo:
@@ -63,9 +170,11 @@ void le_arq_texto(char *nome_arquivo, char *conteúdo);
 
 Repare que o conteúdo do arquivo é armazenado no vetor 'conteudo[]'. 
 Ou seja, ele é passado por referência. 
-Salve esta função no mesmo arquivo da questão 4, chamado 'bib_arqs.c'. 
+Salve esta função no mesmo arquivo da questão 4, chamado 'bib_arqs_main.c'. 
 Salve o protótipo no arquivo 'bib_arqs.h'. 
-Compile 'bib_arqs.c' novamente para gerar o objeto 'bib_arqs.o'.
+Compile 'bib_arqs_main.c' novamente para gerar o objeto 'bib_arqs.o'.
+
+
 
 
 
@@ -88,6 +197,7 @@ Reaproveite as funções já criadas nas questões anteriores.
 Por exemplo, considerando que o código criado recebeu o nome de 'busca_e_conta':
 
 	$ echo Ola mundo cruel! Ola universo ingrato! > ola.txt
+	
 	$ ./busca_e_conta Ola ola.txt
 
 	$ 'Ola' ocorre 2 vezes no arquivo 'ola.txt'.
