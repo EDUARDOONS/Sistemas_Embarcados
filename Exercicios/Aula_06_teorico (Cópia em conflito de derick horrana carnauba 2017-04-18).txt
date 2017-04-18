@@ -1,0 +1,67 @@
+1. Como se utiliza o comando 'ps' para:
+	(a) Mostrar todos os processos rodando na máquina?
+
+ps -a : mostra os processos de todos os usuários.
+ps -e : mostra as variáveis de ambiente no momento da inicialização do processo.
+
+	(b) Mostrar os processos de um usuário?
+
+ps -user root
+-u : fornece o nome do usuário e a hora de início do processo.
+
+	(c) Ordenar todos os processos de acordo com o uso da CPU?
+
+ps -
+	(d) Mostrar a quanto tempo cada processo está rodando?
+ps -ef
+
+2. De onde vem o nome fork()?
+
+O fork(bifurcação) é uma função que é uma chamada de sistema. Ou seja, ela invoca o sistema operacional para fazer alguma tarefa que o usuário não pode.
+No caso, o fork é usado para criar um novo processo em sistemas do tipo Unix, e isso só pode ser feito via fork.
+
+Quando criamos um processo por meio do fork, dizemos que esse novo processo é o filho, e processo pai é aquele que usou o fork.
+
+Por exemplo, suponha que você programou um software em C, e nele usou a chamada fork().
+Esse programa em C, executando, é o processo pai.
+
+Quando usamos o fork, será criado o processo filho, que será idêntico ao pai, inclusive tendo as mesmas variáveis, registros, descritores de arquivos etc.
+Ou seja, o processo filho é uma cópia do pai, exatamente igual.
+
+Porém, é uma cópia, e como tal, depois de criado o processo filho, ele vai ser executado e o que acontece em um processo não ocorre no outro, são processos distintos agora, cada um seguindo seu rumo, onde é possível mudar o valor de uma variável em um e isso não irá alterar o valor desta variável no outro processo, por exemplo.
+
+3. Quais são as vantagens e desvantagens em utilizar:
+	(a) system()?
+
+A função system oriunda da biblioteca padrão do C (stdlib.h) permite, de maneira
+muito simples executar um comando dentro do programa em execução. A partir dele,
+o sistema cria um sub-processo onde o comando é executado em um shell padrão.
+
+#include <stdlib.h>
+int main ()
+{
+int retorna_valor;
+retorna_valor = system (“ls -l /”);
+return retorna_valor;
+}
+
+A função system retorna em sua saída o status do comando no shell. Se o shell não
+puder ser executado, o system() retorna o valor 127; se um outro erro ocorre, a
+função retorna -1.
+Como a função system utiliza o shell para invocar um comando, ela fica sujeita às
+características, limitações e falhas de segurança inerentes do shell do sistema. Além
+disso, não se pode garantir que uma versão particular do shell Bourne (por exemplo)
+esteja disponível. Ou até mesmo, restrições devido aos privilégios do usuário podem
+inviabilizar o sistema em questão.
+
+	(b) fork() e exec()?
+
+4. É possível utilizar o exec() sem executar o fork() antes?
+
+5. Quais são as características básicas das seguintes funções:
+	(a) execp()?
+	(b) execv()?
+	(c) exece()?
+	(d) execvp()?
+	(e) execve()?
+	(f) execle()?

@@ -1,0 +1,226 @@
+﻿Data: 23/03/2017
+
+1. Considerando a biblioteca-padrão da linguagem C, responda:
+(a) Quais são as funções (e seus protótipos) para abrir e fechar arquivos?
+
+Para abrir:
+Declaração de Arquivos:
+FILE *ponteiro_para_arquivo;
+Função para abrir arquivos
+FILE *fopen (char *nome_do_arquivo, char *modo)
+
+fopen()
+Esta é a função de abertura de arquivos. Seu protótipo é:
+FILE *fopen (char *nome_do_arquivo,char *modo);
+O nome_do_arquivo determina qual arquivo deverá ser aberto. Este nome deve ser
+válido no sistema operacional que estiver sendo utilizado. O modo de abertura diz à
+função fopen() que tipo de uso você vai fazer do arquivo. A tabela abaixo mostra os
+valores de modo válidos:
+
+Modo Significado
+"r"
+Abre um arquivo texto para leitura. O arquivo deve existir antes de ser
+aberto.
+"w"
+Abrir um arquivo texto para gravação. Se o arquivo não existir, ele será
+criado. Se já existir, o conteúdo anterior será destruído.
+"a"
+Abrir um arquivo texto para gravação. Os dados serão adicionados no fim
+do arquivo ("append"), se ele já existir, ou um novo arquivo será criado,
+no caso de arquivo não existente anteriormente.
+"rb" Abre um arquivo binário para leitura. Igual ao modo "r" anterior, só que o
+4
+arquivo é binário.
+"wb"
+Cria um arquivo binário para escrita, como no modo "w" anterior, só que o
+arquivo é binário.
+"ab"
+Acrescenta dados binários no fim do arquivo, como no modo "a" anterior,
+só que o arquivo é binário.
+"r+"
+Abre um arquivo texto para leitura e gravação. O arquivo deve existir e
+pode ser modificado.
+"w+"
+Cria um arquivo texto para leitura e gravação. Se o arquivo existir, o
+conteúdo anterior será destruído. Se não existir, será criado.
+"a+"
+Abre um arquivo texto para gravação e leitura. Os dados serão
+adicionados no fim do arquivo se ele já existir, ou um novo arquivo será
+criado, no caso de arquivo não existente anteriormente.
+"r+b"
+Abre um arquivo binário para leitura e escrita. O mesmo que "r+" acima,
+só que o arquivo é binário.
+"w+b"
+Cria um arquivo binário para leitura e escrita. O mesmo que "w+" acima,
+só que o arquivo é binário.
+"a+b"
+Acrescenta dados ou cria uma arquivo binário para leitura e escrita. O
+mesmo que "a+" acima, só que o arquivo é binário
+Pode-se então, para abrir um arquivo binário para escrita, escrever:
+FILE *fp; /* Declaração da estrutura
+fp=fopen ("exemplo.bin","wb"); /* o arquivo se chama exemplo.bin e está
+localizado no diretório corrente */
+if (!fp)
+printf ("Erro na abertura do arquivo.");
+
+
+Para fechar:
+fclose()
+Quando termina-se de usar um arquivo que aberto, deve-se fechá-lo. Para tanto usa-se
+a função fclose():
+int fclose (FILE *fp);
+O ponteiro fp passado à função fclose() determina o arquivo a ser fechado. A função
+retorna zero no caso de sucesso.
+
+A função exit() fecha todos os arquivos que um programa tiver aberto.
+
+(b) Quais são as funções (e seus protótipos) para escrever em arquivos?
+putc()
+A função putc é a primeira função de escrita de arquivo que veremos. Seu protótipo é:
+int putc (int ch,FILE *fp);
+for(i=0; string[i]; i++) putc(string[i], fp);
+
+(c) Quais são as funções (e seus protótipos) para ler arquivos?
+Leitura de arquivos:
+int getc (FILE *fp);
+while((c = getc(fp) ) != EOF) /* Enquanto não chegar ao final do arquivo */
+printf("%c", c);
+
+(d) Quais são as funções (e seus protótipos) para reposicionar um ponteiro para arquivo?
+Reposiciona ponteiro do stream
+int fseek ( FILE * stream, long int offset, int origin );	
+SEEK_SET 0 Início do arquivo
+SEEK_CUR 1 Posição corrente do arquivo
+SEEK_END 2 Fim do arquivo
+
+(e) Quais bibliotecas devem ser incluídas no código para poder utilizar as funções acima?
+#include <stdlib.h> /* Para a função exit() */
+C(stdio.h(
+‣ fopen(\(abre(arquivo(
+‣ fscanf(\(entrada(formatada(
+‣ fprintf(\(saida(formatada(
+‣ fclose(\(fecha(arquivo(
+‣ outros((fseek,(rewind,(…)(
+
+(f) Outras funções:
+Detectar fim de arquivos:
+int feof (FILE *fp);  while (!feof(p)) { /* Enquanto não se chegar no final do arquivo */
+
+Lê uma string de um stream
+char *fgets (char *str, int tamanho,FILE *fp);
+
+Escreve um string em um stream
+char *fputs (char *str,FILE *fp);
+
+Verifica o indicador de erro
+int ferror (FILE *fp);
+
+Imprime a mensagem de erro
+void perror ( const char * str );
+
+Lê bloco de dados do stream
+unsigned fread (void *buffer, int numero_de_bytes, int
+count, FILE *fp);
+
+Escreve bloco
+unsigned fwrite (void *buffer,int numero_de_bytes,int
+count,FILE *fp);
+
+Volta ponteiro do stream para o início
+void rewind ( FILE * stream );
+
+Apara uma rquivo
+int remove (char *nome_do_arquivo);
+
+fprintf()
+A função fprintf() funciona como a função printf(). A diferença é que a saída de
+fprintf() é um arquivo e não a tela do computador. Protótipo:
+int fprintf (FILE *fp,char *str,...);
+Como já é de se esperar, a única diferença do protótipo de fprintf() para o de
+printf() é a especificação do arquivo destino por meio do ponteiro de arquivo
+
+
+fscanf()
+A função fscanf() funciona como a função scanf(). A diferença é que fscanf() lê
+de um arquivo e não do teclado do computador. Protótipo:
+int fscanf (FILE *fp,char *str,...);
+
+Cada uma destas constantes pode ser utilizada como um ponteiro para FILE, para
+acessar os periféricos associados a eles. Desta maneira, pode-se, por exemplo, usar:
+ch =getc(stdin);
+para efetuar a leitura de um caracter a partir do teclado, ou :
+putc(ch, stdout);
+para imprimí-lo na tela.
+
+
+2. O que é a norma POSIX?
+Portable(Operating(System(Interface
+
+3. Considerando a norma POSIX, responda:
+	(a) Quais são as funções (e seus protótipos) para abrir e fechar arquivos?
+Para abrir:
+POSIX open
+abrir(e(opcionalmente(caiar(um(arquivo(para(leitura(e/ou(escrita
+Protótipo:
+int open(const char* path, int oflag, …)
+
+int fd
+fd = open(“/tmp/teste.txt”, O_WRONLY);
+
+flags:
+O_RDONLY open for reading only
+O_WRONLY open for writing only
+O_RDWR open for reading and writing
+O_NONBLOCK do not block on open or for data to become available
+O_APPEND append on each write
+O_CREAT create file if it does not exist
+O_TRUNC truncate size to 0
+O_EXCL error if O_CREAT and the file exists
+O_SHLOCK atomically obtain a shared lock
+O_EXLOCK atomically obtain an exclusive lock
+O_NOFOLLOW do not follow symlinks
+O_SYMLINK allow open of symlinks
+O_EVTONLY descriptor requested for event notifications only
+O_CLOEXEC mark as close-on-exec
+
+Para fechar:
+Protótipo: int close(int fildes)
+
+int iStatus = close(fd);
+
+(b) Quais são as funções (e seus protótipos) para escrever em arquivos?
+ssize_t write(int fildes, const void *buf, size_t nbyte);
+
+short siX16=0x7FFF;
+int res = write(fd, &siX16, sizeof(short) );
+
+(c) Quais são as funções (e seus protótipos) para ler arquivos?
+Protótipo:
+ssize_t read(int fildes, void *buf, size_t nbyte);
+
+short siX16;
+int res = read(fid, &siX16, sizeof(short) );
+
+(d) Quais são as funções (e seus protótipos) para reposicionar um ponteiro para arquivo?
+lseek
+reposiciona(o(ponteiro(do(descritor(do(arquivo(em(um(arquivo(aberto
+
+Protótipo:
+off_t lseek(int fd, off_t offset, int whence);
+
+int fd;
+char c;
+fd = open(“/tmp/teste.txt”, O_RDONLY);
+lseek(fd, 6, SEEK_SET);
+read(fd, &c, 1);
+
+(e) Quais bibliotecas devem ser incluídas no código para poder utilizar as funções acima?
+#include <fcntl.h>
+#include <unistd.h>
+
+UNIX(/(POSIX(
+‣ open(
+‣ read(
+‣ write(
+‣ close(
+‣ outros((mmap,(lseek,(poll,(…)(

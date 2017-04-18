@@ -1,0 +1,25 @@
+﻿Data: 06/04/2017
+
+1. Apresente as características e utilidades das seguintes funções:
+(a) popen()
+Pipe(Stream(de(um(processo(para(outro:((
+• Cria(um(PIPE(unidirecional;(
+• Faz(um(Fork()(
+• Chama(o(Shell(para(abrir(um(outro(processo(no(lugar(do(
+filho;(
+
+FILE *popen(const char *command, const char *type);
+
+(b) pclose()
+Fecha(o(Pipe(Stream(de(um(processo(para(outro(
+
+int pclose(FILE *stream);
+
+(c) fileno()
+
+Retorna(o(número(do(descritor(do(arquivo(
+int fileno(FILE *stream);
+
+2. Quais são as vantagens e desvantagens em utilizar:
+	(a) popen()?
+	(b) exec()?
