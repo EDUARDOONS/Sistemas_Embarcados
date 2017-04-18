@@ -1,0 +1,28 @@
+Uma chamada na função pthread_create retorna imediatamente, enquanto a thread
+original continua a execução do programa. Enquanto isso a nova thread começa
+executando a thread function. Como o Linux agenda as threads assíncronamente, o
+programa não distingue a ordem de execução das instruções das threads. Uma
+maneira de se verificar isso é rodando o seguinte programa:
+#include <pthread.h>
+#include <stdio.h>
+/* Imprime 'x' em stderr. */
+void* print_xs (void* unused)
+{
+while (1)
+fputc ('x', stderr);
+return NULL;
+}
+int main ()
+{
+pthread_t thread_id;
+/* Cria um novo thread. A nova therad irá chamar a função print_xs*/
+pthread_create (&thread_id, NULL, &print_xs, NULL);
+/* Imprime 'o' continuamente em stderr. */
+while (1)
+fputc ('o', stderr);
+return 0;
+}
+33
+Código: CriandoThread.c
+Para compilar e conectar esse programa basta utilizar a seguinte linha de comando:
+$ gcc CriandoThread.c -o CriandoThread -lpthread

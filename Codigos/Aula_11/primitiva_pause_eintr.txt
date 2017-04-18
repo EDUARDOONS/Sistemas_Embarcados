@@ -1,0 +1,31 @@
+Exemplo:
+#include <errno.h>
+#include <unistd.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+void it_main(sig) /* tratamento sobre o 1o SIGINT */
+int sig ;
+{
+printf("recepção do sinal número : %d\n",sig) ;
+printf("vamos retomar o curso ?\n") ;
+printf("é o que o os profs insistem em dizer geralmente!\n") ;
+}
+void it_fin(sig) /* tratamento sobre o 2o SIGINT */
+int sig ;
+{
+printf("recepção do sinal número : %d\n",sig) ;
+printf("ok, tudo bem, tudo bem ...\n") ;
+exit(1) ;
+}
+int main()
+{
+signal(SIGINT,it_main) ; /* interceptacao do 1o SIGINT */
+printf("vamos fazer uma pequena pausa (cafe!)\n") ;
+printf("digite CTRL+c para imitar o prof\n") ;
+printf("retorno de pause (com a recepcao do sinal): %d\n",pause()) ;
+printf("errno = %d\n",errno) ;
+signal(SIGINT,it_fin) ; /* rearma a interceptacao: 2o SIGINT */
+for(;;) ;
+exit(0) ;
+}

@@ -1,0 +1,51 @@
+/* testa os valores de retorno de alarm() */
+/* assim que seu funcionamento */
+#include <signal.h>
+#include <unistd.h>
+#include <stdio.h>
+void it_horloge(int sig) /* rotina executada na recepc~ao de SIGALRM
+*/
+{ printf("recepc~ao do sinal %d :SIGALRM\n",sig) ; }
+main() {
+unsigned sec ;
+signal(SIGALRM,it_horloge) ; /* interceptac~ao do sinal */
+printf("Fazendo alarm(5)\n") ;
+sec = alarm(5) ;
+printf("Valor retornado por alarm: %d\n",sec) ;
+printf("Principal em loop infinito (CTRL+c para acabar)\n") ;
+for(;;) ;
+}
+Outro exemplo:
+/* teste dos valores de retorno de alarm() quando 2
+* chamadas a alarm() sao feitas sucessivamente
+*/
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+void it_horloge(int sig) /* tratamento do desvio sobre SIGALRM */
+{
+printf("recepcao do sinal %d : SIGALRM\n",sig) ;
+printf("atencao, o principal reassume o comando\n") ;
+}
+void it_quit(int sig) /* tratamento do desvio sobre SIGALRM */
+{
+printf("recepcao do sinal %d : SIGINT\n",sig) ;
+printf("Por que eu ?\n") ;
+}
+int main()
+{
+unsigned sec ;
+signal(SIGINT,it_quit); /* interceptacao do ctrl-c */
+signal(SIGALRM,it_horloge); /* interceptacao do sinal de alarme */
+printf("Armando o alarme para 10 segundos\n");
+sec=alarm(10);
+printf("valor retornado por alarm: %d\n",sec) ;
+printf("Paciencia... Vamos esperar 3 segundos com sleep\n");
+sleep(3) ;
+printf("Rearmando alarm(5) antes de chegar o sinal precedente\n");
+sec=alarm(5);
+printf("novo valor retornado por alarm: %d\n",sec);
+printf("Principal em loop infinito (ctrl-c para parar)\n");
+for(;;);
+}

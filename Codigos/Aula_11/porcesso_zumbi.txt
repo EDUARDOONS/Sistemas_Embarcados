@@ -1,0 +1,22 @@
+Exemplo: O programa a seguir gera um processo zumbi quando o pai é informado da
+morte do filho por meio do sinal SIGCLD.
+#include <stdio.h>
+#include <unistd.h>
+int main() {
+if (fork() != 0) while(1) ;
+return(0);
+}
+Para executá-lo basta:
+# ./test_sigcld &
+# ps
+No próximo programa, o pai ignora o sinal SIGCLD, e seu filho não vai mais se tornar
+um processo zumbi.
+#include <stdio.h>
+#include <signal.h>
+#include <unistd.h>
+int main() {
+signal(SIGCLD,SIG_IGN) ;/* ignora o sinal SIGCLD */
+if (fork() != 0)
+while(1) ;
+return(0);
+}

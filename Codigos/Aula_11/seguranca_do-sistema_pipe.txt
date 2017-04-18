@@ -1,0 +1,27 @@
+Seguranca do sistema
+No caso em que todos os descritores associados aos processos susceptíveis de ler
+num tubo estiverem fechados, um processo que tenta escrever neste tubo deve
+receber um sinal SIGPIPE, sendo então interrompido se ele não possuir uma rotina de
+tratamento deste sinal.
+Se um tubo esta vazio, ou se todos os descritores susceptíveis de escrever sobre ele
+estiverem fechados, a primitiva read() retornará o valor 0 (fim de arquivo lido).
+Exemplo de emissão de um sinal SIGPIPE:
+#include <errno.h>
+#include <signal.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+void it_sigpipe()
+{
+printf("Sinal SIGPIPE recebido \n") ;
+}
+int main()
+{
+int p_desc[2] ;
+signal(SIGPIPE,it_sigpipe) ;
+pipe(p_desc) ;
+close(p_desc[0]) ; /* fechamento do tubo em leitura */
+if (write(p_desc[1],"0",1) == -1)
+perror("Error write") ;
+exit(0);
+}

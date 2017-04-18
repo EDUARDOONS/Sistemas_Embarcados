@@ -1,0 +1,32 @@
+Todos àqueles que já lançaram programas de simulação ou de cálculo númerico muito
+longos devem ter pensado numa forma de saber como está progredindo a aplicação
+durante a sua execução. Isto é perfeitamente possível por meio do envio do comando
+shell kill aos processos associados ao sinal. Os processos podem então, após a
+recepção deste sinal, apresentar os dados desejados. O exemplo a seguir mostra um
+programa que ajuda a resolver este problema:
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <time.h>
+#include <unistd.h>
+/* as variaveis a serem editadas devem ser globais */
+long somme = 0 ;
+void it_verificacao()
+{
+long t_date ;
+signal(SIGUSR1, it_verificacao) ;/* reativo SIGUSR1 */
+time(&t_date) ;
+printf("\n Data do teste : %s ", ctime(&t_date)) ;
+printf("valor da soma : %d \n", (int) somme) ;
+}
+int main()
+{
+signal(SIGUSR1,it_verificacao) ;
+printf ("Enviar o sinal USR1 para o processo %d \n",getpid()) ;
+while(1) {
+sleep(1);
+somme++ ;
+}
+exit(0);
+}
