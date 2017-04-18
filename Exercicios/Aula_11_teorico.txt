@@ -10,7 +10,10 @@ Data: 13/04/2017
 
 3. Com relação à pilha de protocolos TCP/IP, responda:
 	(a) O que são suas camadas? Para que servem?
-	(b) Quais são as camadas existentes? Para que servem?
+
+Como podemos observar na Figura acima, o TCP-IP possui 4 camadas sendo que o início se dá com o programa conversando na camada de aplicação. Nesta camada você vai encontrar protocolos como o SMTP (para e-mail), FTP (para transferência de arquivos) e HTTP (para navegar na internet) e cada tipo de programa fala para um protocolo diferente da camada de Aplicação, dependendo do propósito do programa.
+	
+(b) Quais são as camadas existentes? Para que servem?
 	(c) Quais camadas são utilizadas pela biblioteca de sockets?
 	(d) As portas usadas por servidores na função bind() se referem a qual camada?
 	(e) Os endereços usados por clientes na função connect() se referem a qual camada?
