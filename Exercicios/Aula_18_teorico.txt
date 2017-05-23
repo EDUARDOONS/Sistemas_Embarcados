@@ -1,6 +1,21 @@
 ﻿Data: 16/05/2017
 
 1. Cite as vantagens e desvantagens das comunicação serial I2C.
+I2C
+I2C é a sigla de Inter-Integrated Circuit, e basicamente é um protocolo de comunicação entre dispositivos que “falam” I2C.
+I2C é um protocolo de barramento(ou bus), ou seja, com os mesmo fios conectamos todos os dispositivos do nosso setup. Essa característica, barramento, é um dos grandes atrativos do I2C, pois reduzimos em muito a necessidade de pinos de conexão, não importa se estamos utilizando 1 ou 127 dispositivos, são sincronos e necessita de dois fios, dados e outro o clock.
+SDA significa Serial Data e SCL significa Serial Clock. SDA é o pino que efetivamente transfere os dados, e SCL serve para temporização entre os dispositivos, de modo que a comunicação pela SDA possa ter confiabilidade. Como podem observar, tanto o envio quanto a recepção de dados é realizada utilizando a linha SDA, ou seja, é uma linha bi-direcional de comunicação, ora estamos enviando dados por este pino, ora estamos recebendo dados.
+Dispositivos I2C possuem um endereço que os identifica. Esse endereço é composto normalmente por 7 bits. Se lembram do limite teórico de 127 dispositivos, pois então, com 7 bits podemos ter 127 valores diferentes 🙂 . Aqui temos um pouco de confusão, pois alem dos 7 bits que definem o endereçamento, temos ainda um ultimo bit, totalizando 8 bits, que indicam se é uma operação de leitura ou escrita 
+
+
+O protocolo de comunicação I2C foi criado pela Philips Semicondutores (hoje NXP) e posteriormente adotado por vários fabricantes. Devido à problemas de licença, pode também ser encontrada como interface TWI (Two Wire Interface) ou TWSI (Two-Wire Serial Interface), mas segue o mesmo princípio de funcionamento.
+
+Na comunicação I2C, são utilizados dois fios para transmissão de dados entre o microcontrolador e um segundo dispositivo. As conexão são feitas por meio dos pinos SDA (Serial Data) e SCL (Serial Clock).
+Cada dispositivo I2C tem um endereço fixo para se comunicar com o microcontrolador e pode ser configurado para transmitir ou receber dados. Assim, tanto a linha SDA como a SCL são bidirecionais, com os dispositivos alternando seu estado entre mestre e escravo.
+
+É importante que tanto o SDA como SCL sejam mantidas em nível alto quando não há transmissão de dados, para isso utilizamos resistores pull-up (R1 e R2 na imagem acima) ligados ao barramento. Sem eles, o barramento não fica em estado “pronto” para enviar e receber dados. Veja esse processo na imagem abaixo, onde os pinos SDA e SCL devem ficar em estado alto tanto no início como no fim:
+
+A vantagem mais evidente da comunicação I2C é a ligação com o microcontrolador utilizando somente 2 fios, possibilitando a comunicação bidirecional. Entretanto, ela não é tão rápida quanto a comunicação SPI e em casos extremos pode ocorrer algum conflito de endereçamento, já que todos os dispositivos utilizam o mesmo barramento.
 
 2. Considere o caso em que a Raspberry Pi deve receber leituras analógico/digitais de um MSP430, e que a comunicação entre os dois é I2C. É tecnicamente possível que o MSP430 mande os resultados da conversão A/D a qualquer hora, ou ele deve aguardar a Raspberry Pi fazer um pedido ao MSP430? Por quê?
 

@@ -10,6 +10,10 @@ UART:
 Além disso, há grandes diferenças mesmo entre os protocolos síncronos. Apesar do padrão de cada protocolo definir limites máximos de taxas, cada fabricante possui a liberdade de desenvolver dispositivos com suas velocidades. Abaixo temos um comparativo entre diversos padrões dispositivos seriais:
 MENOR TAXA DE TRASMISSÃO DE DADOS EM RELAÇÃO AO SPI E I2C. Como um exemplo de que esses limites podem ser ultrapassados, temos AT45BD0100D da Adesto. Essa memória SPI pode chegar até 66MHz (66Mbps) de taxa de transferência. Para o I2C, o 24FC64 da Microchip pode chegar a 1MHz (1Mbps).
 
+m uma comunicação serial RS-232 padrão, há um canal para transmitir (TXD) e um para receber (RXD). Dessa forma, o envio e o recebimento de informação podem ser feitas simultaneamente, e não há a necessidade de esperar o fim de um para o início do outro. Essa comunicação é full-duplex.
+
+
+
 SPI 
 https://www.embarcados.com.br/spi-parte-1/
 A comunicação via interface SPI usa comunicação serial síncrona, com o conceito de mestre-escravo. Nesse tipo de comunicação, temos um dispositivo mestre (geralmente o microcontrolador) e vários escravos (periféricos).
@@ -44,8 +48,8 @@ A vantagem mais evidente da comunicação I2C é a ligação com o microcontrola
 
 
 
-m uma comunicação serial RS-232 padrão, há um canal para transmitir (TXD) e um para receber (RXD). Dessa forma, o envio e o recebimento de informação podem ser feitas simultaneamente, e não há a necessidade de esperar o fim de um para o início do outro. Essa comunicação é full-duplex.
- 
+
+ CONCLUSÃO
 O SPI não apenas permite que os dados sejam transmitidos e recebidos simultaneamente, como é uma exigência de hardware. Cada bit de dado enviado do Master para o Slave, transfere também um bit de dado do Slave para o Master. Isso porque o fundamento do SPI é um circuito shift-register, como visto no artigo passado.
 
 
