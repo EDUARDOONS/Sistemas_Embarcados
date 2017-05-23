@@ -1,0 +1,175 @@
+﻿Data: 11/05/2017
+
+1. Cite as vantagens e desvantagens das comunicação serial:
+http://buildbot.com.br/blog/interfaces-de-comunicacao-onewire-spi-i2c/
+	(a) Assíncrona (UART).
+	(b) SPI.
+UART:
+á estamos bastante familiarizados com a comunicação serial assíncrona pelo uso do padrão UART (RS232). No entanto, existem grandes vantagens no uso de uma comunicação serial síncrona em detrimento da assíncrona.
+ 
+Além disso, há grandes diferenças mesmo entre os protocolos síncronos. Apesar do padrão de cada protocolo definir limites máximos de taxas, cada fabricante possui a liberdade de desenvolver dispositivos com suas velocidades. Abaixo temos um comparativo entre diversos padrões dispositivos seriais:
+MENOR TAXA DE TRASMISSÃO DE DADOS EM RELAÇÃO AO SPI E I2C. Como um exemplo de que esses limites podem ser ultrapassados, temos AT45BD0100D da Adesto. Essa memória SPI pode chegar até 66MHz (66Mbps) de taxa de transferência. Para o I2C, o 24FC64 da Microchip pode chegar a 1MHz (1Mbps).
+
+SPI 
+https://www.embarcados.com.br/spi-parte-1/
+A comunicação via interface SPI usa comunicação serial síncrona, com o conceito de mestre-escravo. Nesse tipo de comunicação, temos um dispositivo mestre (geralmente o microcontrolador) e vários escravos (periféricos).
+A comunicação SPI possui algumas características básicas. Primeiramente os sinais de comunicação possuem uma direção fixa e definida. Isso significa que sempre existem dois transistores definindo o estado de um pino (Push-Pull). Essa característica é uma das grandes diferenças entre outras comunicações seriais como I2C e OneWire, que possuem um mesmo barramento de dados para os sinais de entrada e saída através do esquema de dreno-aberto (Pull-Up).
+Apesar de utilizar dois sinais de comunicação de dados em vez de um, é possível atingir velocidades maiores de comunicação. Isso porque há pouca deformação do sinal.
+ 
+Outra característica é que toda troca de dados acontece sempre em ambas as direções. Em outras palavras, cada bit trocado entre o Master e um Slave trás um bit do Slave para o Master. Dessa forma, definimos que a comunicação é sempre full-duplex.
+ 
+Os pinos básicos de comunicação entre dispositivos SPI e o esquema padrão de ligação são dados conforme abaixo:
+
+FUNCIONAMENTO:
+Como podemos ver na imagem acima, os pinos SCLK (Clock), MOSI (Master Output Slave Input) e MISO (Master Input SlaveOutput) são compartilhados pelos escravos e definem a sincronização e o envio e recebimento de dados. Para seleção do escravo, temos um pino independente (SS – Slave Select) para cada um que é ativado em nível baixo.
+
+Para envio e recebimento de dados é enviado um sinal de clock do mestre para o escravo e esse clock determina em qual momento o bit pode ser enviado. Esse envio pode ser feito quanto o clock está passando do nível alto para o baixo ou quanto está passando do nível baixo para o alto, como na imagem abaixo :
+
+
+I2C
+I2C é a sigla de Inter-Integrated Circuit, e basicamente é um protocolo de comunicação entre dispositivos que “falam” I2C.
+I2C é um protocolo de barramento(ou bus), ou seja, com os mesmo fios conectamos todos os dispositivos do nosso setup. Essa característica, barramento, é um dos grandes atrativos do I2C, pois reduzimos em muito a necessidade de pinos de conexão, não importa se estamos utilizando 1 ou 127 dispositivos, são sincronos e necessita de dois fios, dados e outro o clock.
+SDA significa Serial Data e SCL significa Serial Clock. SDA é o pino que efetivamente transfere os dados, e SCL serve para temporização entre os dispositivos, de modo que a comunicação pela SDA possa ter confiabilidade. Como podem observar, tanto o envio quanto a recepção de dados é realizada utilizando a linha SDA, ou seja, é uma linha bi-direcional de comunicação, ora estamos enviando dados por este pino, ora estamos recebendo dados.
+Dispositivos I2C possuem um endereço que os identifica. Esse endereço é composto normalmente por 7 bits. Se lembram do limite teórico de 127 dispositivos, pois então, com 7 bits podemos ter 127 valores diferentes 🙂 . Aqui temos um pouco de confusão, pois alem dos 7 bits que definem o endereçamento, temos ainda um ultimo bit, totalizando 8 bits, que indicam se é uma operação de leitura ou escrita 
+
+
+O protocolo de comunicação I2C foi criado pela Philips Semicondutores (hoje NXP) e posteriormente adotado por vários fabricantes. Devido à problemas de licença, pode também ser encontrada como interface TWI (Two Wire Interface) ou TWSI (Two-Wire Serial Interface), mas segue o mesmo princípio de funcionamento.
+
+Na comunicação I2C, são utilizados dois fios para transmissão de dados entre o microcontrolador e um segundo dispositivo. As conexão são feitas por meio dos pinos SDA (Serial Data) e SCL (Serial Clock).
+Cada dispositivo I2C tem um endereço fixo para se comunicar com o microcontrolador e pode ser configurado para transmitir ou receber dados. Assim, tanto a linha SDA como a SCL são bidirecionais, com os dispositivos alternando seu estado entre mestre e escravo.
+
+É importante que tanto o SDA como SCL sejam mantidas em nível alto quando não há transmissão de dados, para isso utilizamos resistores pull-up (R1 e R2 na imagem acima) ligados ao barramento. Sem eles, o barramento não fica em estado “pronto” para enviar e receber dados. Veja esse processo na imagem abaixo, onde os pinos SDA e SCL devem ficar em estado alto tanto no início como no fim:
+
+A vantagem mais evidente da comunicação I2C é a ligação com o microcontrolador utilizando somente 2 fios, possibilitando a comunicação bidirecional. Entretanto, ela não é tão rápida quanto a comunicação SPI e em casos extremos pode ocorrer algum conflito de endereçamento, já que todos os dispositivos utilizam o mesmo barramento.
+
+
+
+m uma comunicação serial RS-232 padrão, há um canal para transmitir (TXD) e um para receber (RXD). Dessa forma, o envio e o recebimento de informação podem ser feitas simultaneamente, e não há a necessidade de esperar o fim de um para o início do outro. Essa comunicação é full-duplex.
+ 
+O SPI não apenas permite que os dados sejam transmitidos e recebidos simultaneamente, como é uma exigência de hardware. Cada bit de dado enviado do Master para o Slave, transfere também um bit de dado do Slave para o Master. Isso porque o fundamento do SPI é um circuito shift-register, como visto no artigo passado.
+
+
+2. Considere o caso em que a Raspberry Pi deve receber leituras analógico/digitais de um MSP430, e que a comunicação entre os dois é UART. É tecnicamente possível que o MSP430 mande os resultados da conversão A/D a qualquer hora, ou ele deve aguardar a Raspberry Pi fazer um pedido ao MSP430? Por quê?
+o MSP430 pode mandar os resultados a qualquer hora, porem o raspberry deve realizar a leitura para coletar os dados.
+Porque o sistema uart utiliza a coleta de dados via clock.
+
+3. Considere o caso em que a Raspberry Pi deve receber leituras analógico/digitais de um MSP430, que a comunicação entre os dois seja SPI, e que o MSP430 seja o escravo. É tecnicamente possível que o MSP430 mande os resultados da conversão A/D a qualquer hora, ou ele deve aguardar a Raspberry Pi fazer um pedido ao MSP430? Por quê?
+terá que fazer o pedido, via inicio do clock, pois será recebido.
+
+4. Se o Raspberry Pi tiver de se comunicar com dois dispositivos via UART, como executar a comunicação com o segundo dispositivo?
+acho que nao da.
+
+5. Se o Raspberry Pi tiver de se comunicar com dois dispositivos via SPI, como executar a comunicação com o segundo dispositivo?
+Para seleção do escravo, temos um pino independente (SS – Slave Select) para cada um que é ativado em nível baixo.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Biblioteca em série UART SERIAL
+O WiringPi inclui uma biblioteca de manipulação de porta serial simplificada. Ele pode usar a porta serial on-board, ou qualquer dispositivo serial USB sem distinções especiais entre eles. Basta especificar o nome do dispositivo na função inicial aberta.
+
+Para usar, você precisa se certificar de que seu programa inclui o seguinte arquivo:
+
+#include <wiringSerial.h>
+Em seguida, as seguintes funções estão disponíveis:
+
+Int serialOpen (char * dispositivo, int baud);
+Isso abre e inicializa o dispositivo serial e define a taxa de transmissão. Ele define a porta em modo "raw" (personagem de cada vez e sem traduções), e define o tempo limite de leitura para 10 segundos. O valor de retorno é o descritor de arquivo ou -1 para qualquer erro, caso em que errno será definido como apropriado.
+
+Void serialClose (int fd);
+Fecha o dispositivo identificado pelo descritor de arquivo fornecido.
+
+Void serialPutchar (int fd, unsigned char c);
+Envia o único byte para o dispositivo serial identificado pelo descritor de arquivo fornecido.
+
+Void serialPuts (int fd, char * s);
+Envia a seqüência de caracteres nul-terminated para o serial dispositivo identificado pelo descritor arquivo fornecido.
+
+V oid serialPrintf (int fd, char * message, ...);
+Emula a função printf do sistema para o dispositivo serial.
+
+Int serialDataAvail (int fd);
+Retorna o número de caracteres disponíveis para leitura ou -1 para qualquer condição de erro, caso em que errno será configurado apropriadamente.
+
+Int serialGetchar (int fd);
+Retorna o próximo caractere disponível no dispositivo serial. Esta chamada irá bloquear por até 10 segundos se não houver dados disponíveis (quando ele retornará -1)
+
+Void serialFlush (int fd);
+Isso descarta todos os dados recebidos, ou aguardando para ser enviado para baixo o dispositivo determinado.
+
+Nota : O descritor de arquivo ( fd ) retornado é um descritor de arquivo padrão do Linux. Você pode usar as chamadas de sistema standard read (), write (), etc. neste descritor de arquivo conforme necessário. Por exemplo, você pode querer escrever um bloco maior de dados binários onde a função serialPutchar () ou serialPuts () pode não ser a função mais apropriada para usar, nesse caso, você pode usar write () para enviar os dados.
+
+Controle Avançado de Porta Serial
+
+A biblioteca de fiaçãoSerial destina-se a fornecer controle simplificado - adequado para a maioria das aplicações, no entanto, se você precisa de controle avançado - por exemplo, controle de paridade, linhas de controle do modem (através de um adaptador USB, não há nenhum no UART bordo do Pi!) , Então você precisa fazer um pouco desta forma "antiquado".
+
+Por exemplo - Para definir a linha serial em modo de 7 bits mais paridade, você precisa fazer isso ...
+
+Em seu programa:
+
+#include <termios.h>
+E em uma função:
+
+  Struct termios opções; 
+
+  Tcgetattr (fd, & opções); // Leia as opções atuais 
+  options.c_cflag & = ~ CSIZE; // Mascara o tamanho 
+  options.c_cflag | = CS7; // Ou em 7 bits 
+  options.c_cflag | = PARENB; // Ativar Paridade - mesmo por padrão 
+  tcsetattr (fd, & opções); // Definir novas opções
+ A variável 'fd' acima é o descritor de arquivo que serialOpen () retorna.
+
+Consulte a página man para tcgetattr para todas as opções que você pode definir.
+
+Homem tcgetattr
+
+
+
+
+
+
+
+
+
+Biblioteca SPI
+WiringPi inclui uma biblioteca que pode torná-lo mais fácil de usar a interface SPI bordo do Raspberry Pi.
+
+Antes de poder usar a interface SPI, talvez seja necessário usar o utilitário gpio para carregar os drivers SPI no kernel:
+
+Gpio load spi
+Se você precisar de um tamanho de buffer maior que 4KB, então você pode especificar o tamanho (em KB) na linha de comando:
+
+Gpio load spi 100
+Irá alocar um buffer de 100KB. (Você raramente precisará disto, porém, o padrão é mais que suficiente para a maioria das aplicações).
+
+Para usar a biblioteca SPI, você precisa:
+
+#include <wiringPiSPI.h>
+No seu programa. Os programas precisam ser ligados com -lwiringPi como de costume.
+
+Funções disponíveis:
+
+Int wiringPiSPISetup (canal int, velocidade int);
+Esta é a maneira de inicializar um canal (O Pi tem 2 canais, 0 e 1). O parâmetro speed é um número inteiro na faixa de 500.000 a 32.000.000 e representa a velocidade de clock SPI em Hz.
+
+O valor retornado é o descritor de arquivo do Linux para o dispositivo ou -1 em caso de erro. Se um erro aconteceu, você pode usar a variável global errno padrão para ver o porquê.
+
+Int wiringPiSPIDataRW (canal int, unsigned char * data, int len);
+Isso executa uma transação de gravação / leitura simultânea sobre o barramento SPI selecionado. Os dados que estavam no seu buffer são substituídos por dados retornados do barramento SPI.
+
+Isso é tudo que há na biblioteca auxiliar. É possível fazer leituras e gravações simples sobre o barramento SPI usando as chamadas de sistema padrão read () e write () embora - write () pode ser melhor usar para enviar dados para cadeias de registradores de deslocamento, ou aquelas cadeias de LED onde você Enviar trigêmeos RGB de dados. Dispositivos como conversores A / D e D / A geralmente precisam executar uma transação simultânea de gravação / leitura para trabalhar.
