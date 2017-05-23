@@ -1,0 +1,25 @@
+﻿Data: 20/04/2017
+
+1. Defina qual modelo de Raspberry Pi você utilizará no projeto desta disciplina com o Raspberry Pi. Justifique sua escolha.
+PI Rasberry 3 B
+O Model B da terceira geração se destaca pelo aumento de performance e a tecnologia embarcada. O processador sobe a 1.2 GHz, mantendo os quatro núcleos, e é capaz de trabalhar em 64 bits. A RAM continua em 1 GB.
+
+os grandes diferenciais, entretanto, são a inclusão de interfaces sem fio de diversos tipos. Há Bluetooth e Wi-Fi inclusos no pacote, desobrigando o usuário a ligar periféricos com essas funcionalidades em projetos que apliquem a placa.
+Em relação às demais interfaces, a Model B da terceira geração oferece uma cópia exata daquilo que é encontrado no Model B da segunda geração: GPIO de 40 pinos, um total de quatro portas USB, interface Ethernet, HDMI, saída de som, interfaces de câmera e tela, além de slot para cartão de memória microSD.
+
+2. Defina qual sistema operacional você utilizará no projeto desta disciplina com o Raspberry Pi. Justifique sua escolha.
+DIGITE O COMANDO : GPDIO READALL
+Utilizaremos o raspberian. Facilidade, ocupaçao de espaço no cartao de memoria.
+
+3. Defina de qual forma você instalará o sistema operacional escolhido. Escreva o passo-a-passo da instalação e forneça os links necessários para isto.
+
+Iniciantes devem começar com NOOBS - Novo Out Of the Box Software. Você pode comprar um cartão SD NOOBS pré-instalado de muitos varejistas, como Pimoroni , Adafruit e The Pi Hut , ou fazer o download do NOOBS abaixo e seguir o guia de configuração do software eo guia de configuração do NOOBS  em nossas páginas de ajuda.
+
+NOOBS é um instalador de sistema operacional fácil que contém Raspbian . Ele também fornece uma seleção de sistemas operacionais alternativos que são então baixados da internet e instalados.
+
+NOOBS Lite contém o mesmo instalador do sistema operacional sem Raspbian pré-carregado. Ele fornece o mesmo menu de seleção do sistema operacional permitindo que Raspbian e outras imagens sejam baixadas e instaladas.
+
+
+
+4. Defina de qual forma você desenvolverá software para o Raspberry Pi no projeto desta disciplina. Escreva o passo-a-passo do desenvolvimento e forneça os links necessários para isto.
+

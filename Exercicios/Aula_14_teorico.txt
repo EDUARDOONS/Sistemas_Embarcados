@@ -1,0 +1,43 @@
+﻿Data: 25/04/2017
+
+1. Com relação às conexões GPIO do modelo de Raspberry Pi que você usará no projeto, responda:
+	(a) Quais pinos podem ser utilizados como entradas e saídas digitais comuns?
+Estes pinos são uma interface física entre o Pi e o mundo exterior. No nível mais simples, você pode pensar neles como interruptores que você pode ligar ou desligar (entrada) ou que o Pi pode ligar ou desligar (saída). Dos 40 pinos, 26 são pinos GPIO e os outros são poder ou terra pinos (mais dois pinos ID EEPROM que você não deve jogar com a menos que você sabe o seu material!)
+
+ara que possamos entender nosso diagrama de forma mais clara, separamos eles em 8 cores diferentes, e aqui vai as características de cada uma:
+
+Vermelho: Esta é uma saída para alimentação, e possui uma tensão de 5V. Deve-se manter atento com ela, pois como já foi dito, ela não pode entrar em contato de maneira alguma com as outras portas.
+Laranja: Esta também é uma saída para alimentação, porém com uma tensão de 3.3V. Com essa, é possível comunicar com outras portas, mas é preciso usar um resistor como limitador de corrente para fazer isso.
+Preto: Estas são simplesmente as portas Terra (GROUND), e não existe tensão na mesma.
+Azul: Essas duas portas podem ser programadas para interface I2C (Circuito Inter-integrado). Para quem não conhece, este é um protocolo criado pela Philips em 2006, para fazer conexões entre periféricos de baixa velocidade. No caso da Raspberry, utiliza-se um barramento entre dois fio, sendo um de dados e outro de clock, para comunicação serial entre circuitos integrados montados em uma mesma placa.
+Amarelo: Estas são as portas seriais,  que utilizam o protocolo RS-232 para o envio e recebimento de sinal digital.
+Verde: Aqui estão os pinos GPIO que falamos anteriormente. Eles servem para fazer envio e recebimento de dados digitais.
+Rosa: Estes pinos são também para entrada e saída de dados digitais. Porém, eles possuem uma característica a mais. Com estes pinos é possível fazer uma comunicação serial Full Duplex síncrono, que permite o processador do Raspberry comunicar com algum periférico externo de forma bidirecional. Mas essa comunicação só acontece, se e somente se o protocolo for implementado.
+Cinza: Essas são as portas do ID EEPROM  (Electrically-Erasable Programmable Read-Only Memory). Este é um tipo de memória que pode ser programado e apagado várias vezes, através de uma tensão elétrica interna ou externa.
+	
+(b) Quais pinos possuem resistores de pull-up e pull-down?
+No RPi isto pode ser feito via hardware ou software. Via hardware basta ligar um resistor de 10k ohms do pino desejado para o 3,3V (pull-up) ou para o terra (pull-down). Via software basta na hora de definir as entradas colocar pull_up_down=GPIO.PUD_UP ou pull_up_down=GPIO.PUD_DOWN.
+
+
+(c) Quais formas de comunicação serial são suportados pelos pinos GPIO?
+https://www.embarcados.com.br/gpio-da-raspberry-pi-linguagem-c/
+GPIO 2 e 3 - I2C (Circuito Inter-integrado)
+GPIO 14 e 15 - protocolo RS-232 -14 TXD e  15 RXD e 16 CLOCK
+
+
+2. Apresente outras 3 bibliotecas de acesso I/O em C para o Raspberry Pi.
+#include "gpio_sysfs.h"
+#include <unistd.h>
+
+
+
+RODAR NO GCC
+Salve como rpi.c, compile gcc rpi.c -o rpi e rode ./rpi
+
+
+4 - Se você estiver usando o Raspberry Pi 3, o arquivo de acesso à porta serial não é "/dev/ttyAMA0", e sim "/dev/ttyS0", pois "/dev/ttyAMA0" é a porta serial usada para comunicar com o módulo Bluetooth da placa. Assim, em todos os exemplos desta aula, troque as definições
+
+#define TTY /dev/ttyAMA0
+por
+
+#define TTY /dev/ttyS0

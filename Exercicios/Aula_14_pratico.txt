@@ -1,0 +1,61 @@
+﻿data: 25/04/2017
+
+1. Escreva um código em C para gerar uma onda quadrada de 1 Hz em um pino GPIO do Raspberry Pi.
+	Frequencia e:
+wmFrequency inHz=19.2e6Hz/pwmClock/pwmRange
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+ 
+int main (void)
+{
+  printf ("Gerando sinais PWM na Raspberry Pi\n") ;
+ 
+  // Inicializa o sistema wiringPi para usar o pinos de GPIO
+  if (wiringPiSetupGpio() == -1)
+    exit (1) ;
+ 
+  // seta o modo do pino para INPUT, OUTPUT ou PWM_OUTPUT
+  pinMode(18,PWM_OUTPUT);
+  // Configura o PWM para o modo mark:space
+  pwmSetMode(PWM_MODE_MS);
+  // seta o divisor para o clock do PWM
+  pwmSetClock(2400);  // valor para 1KHz
+  // seta o registrador de intervalo no gerador de PWM
+  pwmSetRange (8);    // valor para 1KHz
+ 
+  for (;;) {
+     // escreve o valor para registrador do PWM em um pino dado 
+     // Gera o sinal de PWM no pino 18 
+     pwmWrite (18, 5);  
+     delay(1000);
+  }
+  
+  return 0;
+}
+
+para copilar
+ gcc pwm.c -o pwm -lwiringPi
+
+https://www.embarcados.com.br/gerando-pwm-na-raspberry-pi/
+
+2. Generalize o código acima para qualquer frequência possível.
+Como observado em uma das outras respostas, o intervalo válido para pwmSetClock()parece ir de 2 para 4095, enquanto o intervalo válido para pwmSetRange()é até 4096 (eu não tente encontrar um limite inferior).
+
+
+
+
+
+3. Crie dois processos, e faça com que o processo-filho gere uma onda quadrada, enquanto o processo-pai lê um botão no GPIO, aumentando a frequência da onda sempre que o botão for pressionado. A frequência da onda quadrada deve começar em 1 Hz, e dobrar cada vez que o botão for pressionado. A frequência máxima é de 64 Hz, devendo retornar a 1 Hz se o botão for pressionado novamente.
+
+
+
+
+
+
+
+
+
+
+
