@@ -1,0 +1,57 @@
+Sincronização utilizando Mutex
+Uma das formas mais comumente usadas é o “dispositivo de exclusão mútua” (mutex).
+Um mutex serve para proteger regiões críticas contra acesso concorrente e para
+implementar formas mais sofisticadsa de sincronização, como monitores.
+O mutex funciona como uma trava parecida com as encontradas em armários públicos
+em aeroportos ou alguns bancos. Se a porta estiver aberta, é só usar (trancar). Se
+estiver fechada, você deve esperar a sua vez.
+O primeiro passo para se usar um mutex é criá-lo. Para tanto, basta definir uma
+variável do tipo pthread_mutex_t e inicializá-la com um dos seguintes valores (para
+Linux):
+• PTHREAD_MUTEX_INITIALIZER -- Um mutex deste tipo suspende
+indefinidamente a thread que tenta usá-lo recursivamente. Isto é, se A travar o
+mutex e tentar travá-lo novamente, antes de liberá-lo. Este tipo é o default.
+• PTHREAD_ERRORCHECK_MUTEX_INITIALIZER_NP -- Para este tipo uma
+solicitação feita pela thread “dona” do mutex provoca um erro (EDEADLK).
+• PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP -- Este é um mutex recursivo.
+Uma outra possibilidade é fazer a inicialização manualmente, com
+pthread_mutex_init
+Para requisitar a ``trava'', usa-se a função:
+pthread_mutex_lock(&mutex)
+O comportamento desta função depende do tipo do mutex, como explicado acima. Se
+o mutex estiver livre, a thread passa ser a “dona” e obtém a trava. Se estiver travado,
+esta chamada bloqueia a thread até chegar sua vez.
+pthread_mutex_trylock faz o mesmo, mas não bloqueia a thread se o mutex estiver
+travado. Ao invés disso, ela retorna um código de erro (EBUSY).
+Para liberar um mutex a função é
+pthread_mutex_unlock(&mutex)
+Para destruir um objeto mutex:
+pthread_mutex_destroy(&mutex)
+Mutexes não são seguros em ambiente assíncronos! As chamadas de travamento e
+liberação devem estar emparelhadas corretamente. Nunca coloque mutexes em
+tratamento de sinais!
+#include <stdio.h>
+#include <pthread.h>
+int x;
+pthread_mutex_t mut = PTHREAD_MUTEX_INITIALIZER;
+void loop() {
+int y,i;
+for (i=0; i< 5000000;i++) {
+pthread_mutex_lock(&mut);
+y = x;
+42
+y += 1;
+x = y;
+pthread_mutex_unlock(&mut);
+}
+}
+int main(int ac)
+{
+pthread_t id1,id2;
+x = 0;
+pthread_create(&id1, NULL, (void*) loop, NULL);
+pthread_create(&id2, NULL, (void*) loop, NULL);
+pthread_join(id1, NULL);
+pthread_join(id2, NULL);
+printf("%d\n", x);
+}

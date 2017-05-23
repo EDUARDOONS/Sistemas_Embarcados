@@ -1,0 +1,39 @@
+Exemplo usando sleep():
+Implementação de uma versão da função sleep() que utiliza as primitivas pause() e
+alarm(). O princípio de funcionamento é simples: um processo arma um alarme (via
+alarm()) e se posiciona em pausa (via pause()). Na chegada do sinal SIGALRM,
+pause() será interrompida e o processo termina sua execução.
+/* utilizacao de pause() e de alarm() para
+* implementar uma primitiva sleep2 */
+#include <errno.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+void nullfcn() /* define-se aqui uma funcao executada quando */
+{ } /* o sinal SIGALRM e interceptado por signal() */
+/* esta funcao nao faz absolutamente nada */
+void sleep2(int secs) /* dorme por secs segundos */
+{
+if( signal(SIGALRM,nullfcn) )
+{
+perror("error: reception signal") ;
+exit(-1) ;
+}
+alarm(secs) ; /* inicializa o relogio a secs segundos */
+pause() ; /* processo em espera por um sinal */
+}
+int main() /* so para testar sleep2() */
+{
+if(fork()==0)
+{
+sleep(3) ;
+printf("hello, sleep\n") ;
+}
+else /* pai */
+{
+sleep2(3) ;
+printf("hello, sleep2\n") ;
+}
+return 0;
+}

@@ -1,0 +1,164 @@
+Sincronização utilizando Semáforos POSIX
+Uma vez que os sistemas operacionais atuais permitem a existência de um recurso
+compartilhado entre dois ou mais threads, onde este recurso seja modificado pelos
+mesmos, exige-se a utilização de mecanismos de sincronização entre os threads. A
+API POSIX fornece para este fim os semáforos e os mutexes, cujo princípio de
+funcionamento é semelhante: existe uma sessão crítica de código onde somente um
+thread poderá estar executando em um dado instante. Isto garante a atomicidade de
+uma operação, assegurando o comportamento esperado no programa.
+37
+Para isso, o POSIX fornece o uso de semáforos e mutex (Mutual Exclusion). Ambos
+garantem a execução de um único thread em um certo trecho de código, com uma
+diferença semântica: mutex são indicados para travar (lock) acesso a um recurso
+comum sendo geralmente utilizados para sincronizar dois threads, enquanto
+semáforos podem atuam como “porteiros” controlando o acesso de 'n' threads a um
+recurso. De fato, é possível implementar um mecanismo em função do outro, porém
+existem problemas onde a semântica dos semáforos se adapta melhor se comparada
+a mutex.
+Os semáforos discutidos abaixo fazem parte do padrão POSIX de extensões para
+tempo real, servindo unicamente para threads. O outro tipo de semáforos (conhecidos
+como Semáforos System V) servem para sincronizar processos diferentes e não serão
+discutidos neste material.
+Existem muitas semelhanças na implementação e uso de ambas as técnicas de
+sincronização, seguindo de forma geral os passos:
+? Definição de uma variável de controle;
+? Acesso a variável de controle para barrar acesso de outros threads na sessão
+crítica;
+? Liberar outros threads.
+Em uma solução mais genérica, desenvolvida por Dijkstra em 1965, os semáforos
+possuem as seguintes características:
+? Seja um semáforo s, uma estrutura de dados contendo um contador e um
+apontador para uma fila de processos bloqueados no semáforo;
+? A estrutura de dados pode somente ser acessado por duas operações atômicas
+(P e V);
+? A operação P bloqueia o processo (neste caso, uma thread) que a executa se o
+valor do semáforo é nulo;
+? A operação V incrementa o valor do semáforo. Existindo processos ou threads
+bloqueados, o primeiro da fila do semáforo é desbloqueado;
+? As modificações no valor do semáforo são executadas atomicamente;
+? Se os dois processos ou threads tentam executar P(s) ou V(s), essas operações
+serão executadas seqüencialmente, em uma ordem arbitrária.
+? Os semáforos podem ser usados para exclusão mútua com 'n' processos,
+quando iniciados com o valor '1'.
+As bibliotecas pthread inclui de definição de semáforos não binários e contém
+primitivas que permitem a inicialização e utilização de semáforos (operções para a
+inicialização de P e V). A biblioteca semaphore.h contém a definição do semáforo s
+realizada da seguinte forma:
+#include <semaphore.h>
+sem_t s;
+Após ter sido declarado, a atribuição do valor inicial do semáforo é feita com a
+primitiva
+int sem_init(sem_t *sem, int pshared, unsigned int value);
+onde:
+sem é o endereço da variável semáforo;
+pshared indica que o semáforo não é compartilhado com threads em outro processo
+quando for 0;
+value indica o valor inicial do semáforo.
+38
+As operações P e V em um semáforo são respectivamente, sem_wait e sem_post,
+como definidos a seguir:
+int sem_wait(sem_t *s);
+int sem_post(sem_t *s);
+Geralmente utilizamos os semáforos quando estamos interessados neste tipo de
+sistema, para um processo denominado Process:
+Process
+{
+sem_wait(&s)
+// processo crítico
+sem_post(&s)
+// processo não crítico
+}
+Exemplo:
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <semaphore.h>
+#define WORK_SIZE 1024
+char work_area[WORK_SIZE];
+sem_t bin_sem;
+void *thread_function(void *arg)
+{
+sem_wait(&bin_sem); //espera ate o valor do semaforo for
+diferente de zero e decrementa ... utilizado na inicializacao!!!
+while(strncmp("end", work_area,3) != 0)//compara com a string
+de finalizacao
+{
+printf("You input %d characters\n", strlen(work_area)-
+1);//mostra o numero de caracteres digitados
+sem_wait(&bin_sem); //espera ate o valor do semaforo for
+diferente de zero e decrementa
+}
+pthread_exit(NULL); //termina a thread
+}
+int main()
+{
+pthread_t a_thread;
+void *thread_result;
+sem_init(&bin_sem, 0 , 0); //inicia o semaforo
+pthread_create(&a_thread, NULL, thread_function, NULL);//cria
+uma thread
+printf("Input some text. Enter 'end' to finish\n"); //
+39
+imprime as instrucoes de uso
+while(strncmp("end", work_area, 3) != 0) //compara com a
+string de finalizacao
+{
+fgets(work_area, WORK_SIZE, stdin); //le a string do
+standard input
+sem_post(&bin_sem); //incrementa o valor do semaforo
+}
+printf("Waiting for thread to finish ...\n");
+pthread_join(a_thread, &thread_result); //juntando a thread -
+para garantir que a funcao main termine depois da thread
+printf("Thread joined\n");
+sem_destroy(&bin_sem); //destruindo o semaforo
+exit(0); //sai da funcao main
+}
+O exemplo clássico do produtor/consumidor:
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <semaphore.h>
+pthread_t tid1, tid2;
+sem_t full, empty, mutex;
+#define N 10
+int buffer[N];
+int i = 0, j = 0; //produtor produz na posicao i e consumidor
+consome na posicao j
+void *produtor()
+{
+for (;;)
+{
+sem_wait(&empty);
+sem_wait(&mutex);
+buffer[i] = 50;
+i = (i + 1) % N;
+sem_post(&mutex);
+sem_post(&full);
+}
+}
+void *consumidor()
+{
+int j, c;
+for (;;)
+{
+sem_wait(&full);
+sem_wait(&mutex);
+c = buffer[j];
+j = (j + 1) % N;
+sem_post(&mutex);
+sem_post(&empty);
+}
+}
+int main()
+{
+sem_init(&mutex, 0, 1);
+sem_init(&full, 0, 0);
+sem_init(&empty, 0, 10);
+pthread_create(&tid1, NULL, produtor, NULL);
+pthread_create(&tid2, NULL, consumidor, NULL);
+pthread_join(tid1, NULL);
+pthread_join(tid2, NULL);
+}
